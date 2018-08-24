@@ -1,0 +1,53 @@
+nginx:
+     image: tutum/nginx
+     ports:
+         - '80:80'
+     volumes:
+         - ./nginx:/etc/nginx/sites-available
+         - ./nginx:/etc/nginx/sites-enabled
+         - ./logs/nginx:/var/log/nginx
+         - ./wordpress:/var/www/html
+     links:
+         - wordpress
+     restart: always
+
+phpfpm:
+     image: php:fpm
+     ports:
+         - '9000:9000'
+     volumes:
+         - ./php:/usr/share/nginx/html
+phpadmin:
+     links:
+         - wordpress
+     image: phpmyadmin/phpmyadmin
+#     ports:
+#         - '80:80'
+     restart:  always
+#     environment:
+#     PMA_HOST: mysql
+#     PMA_USER: root
+#     PMA_PASSWORD: root123
+
+mysql:
+     image: mysql
+     ports:
+         - '3306:3306'
+     volumes:
+         - ./db-data:/var/lib/mysql
+     environment:
+         - MYSQL_ROOT_PASSWORD=root123
+     restart: always
+
+wordpress:
+     image: wordpress
+     volumes:
+         - ./wordpress:/var/www/html
+     environment:
+         - WORDPRESS_DB_NAME=wpdb
+         - WORDPRESS_TABLE_PREFIX=wp_
+         - WORDPRESS_DB_HOST=mysql
+         - WORDPRESS_DB_PASSWORD=root123
+     links:
+         - mysql
+     restart: always
