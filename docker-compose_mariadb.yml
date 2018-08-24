@@ -1,0 +1,24 @@
+wordpress:
+  image: wordpress
+  restart: always
+  links:
+    - mariadb:mysql
+  environment:
+    - VIRTUAL_HOST=example.com,www.example.com
+#    - LETSENCRYPT_HOST= yourdomain.com,www.yourdomain.com
+#    - LETSENCRYPT_EMAIL=email@domain.com
+  expose:
+    - 80
+    - 443
+  volumes_from:
+    - domain1_wordpress_data
+  volumes:
+    - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+mariadb:
+  image: mysql
+  restart: always
+  environment:
+    - MYSQL_ROOT_PASSWORD=root123
+    - MYSQL_DATABASE=wordpress
+  volumes_from:
+    - domain1_mariadb_data
