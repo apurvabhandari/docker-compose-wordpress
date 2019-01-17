@@ -11,7 +11,7 @@ wordpress:
     - 80
     - 443
   volumes_from:
-    - domain1_wordpress_data
+    - domain_wordpress_data
   volumes:
     - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
 mariadb:
@@ -21,4 +21,4 @@ mariadb:
     - MYSQL_ROOT_PASSWORD=root123
     - MYSQL_DATABASE=wordpress
   volumes_from:
-    - domain1_mariadb_data
+    - domain_mariadb_data
